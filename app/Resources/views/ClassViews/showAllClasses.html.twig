@@ -1,0 +1,13 @@
+{% extends '@FOSUser/layout.html.twig' %}
+
+{% block body %}
+
+    <div>
+        {% for class in classes %}
+            Klasa: <a href="{{ path('class_info', {'id': class.id}) }}"> {{ class.name }}</a><br>
+
+            Wychowawca:
+            <a href="{{ path('homepage', {'id': class}) }}">{{ class.educator }} {{ class.educator }}</a><br><br>
+        {% endfor %}
+    </div>
+{% endblock %}

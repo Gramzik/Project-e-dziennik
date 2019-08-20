@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8"/>
+</head>
+<body>
+<div>
+    <a href="{{ path('homepage') }}">Strona główna</a>
+
+    <a href="{{ path('fos_user_change_password') }}">Zmiana hasła.</a>
+
+    <a href="{{ path('fos_user_profile_edit') }}">Edytuj profil.</a>
+
+</div><br>
+<div>
+    {% if is_granted('ROLE_SUPER_ADMIN') %}
+        <a href="{{ path('admin_panel') }}">Panel Administratora</a>
+    {% elseif is_granted('ROLE_EDUCATOR') %}
+        <a href="{{ path('educator_panel') }}">Panel Wychowawcy</a>
+    {% elseif is_granted('ROLE_TEACHER') %}
+        <a href="{{ path('teacher_panel') }}">Panel Nauczyciela</a>
+    {% elseif is_granted('ROLE_USER') %}
+        <a href="{{ path('user_panel') }}">Panel Ucznia</a>
+    {% endif %}
+</div><br>
+
+<div>
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        {{ 'layout.logged_in_as'|trans({'%username%': app.user.username}, 'FOSUserBundle') }} |
+        <a href="{{ path('fos_user_security_logout') }}">
+            {{ 'layout.logout'|trans({}, 'FOSUserBundle') }}
+        </a>
+    {% else %}
+        <a href="{{ path('fos_user_security_login') }}">{{ 'layout.login'|trans({}, 'FOSUserBundle') }}</a>
+    {% endif %}
+
+</div><br>
+
+{% if app.request.hasPreviousSession %}
+    {% for type, messages in app.session.flashbag.all() %}
+        {% for message in messages %}
+            <div class="flash-{{ type }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endfor %}
+{% endif %}
+
+<div>
+    {% block fos_user_content %}
+    {% endblock fos_user_content %}
+</div>
+<div>
+    {% block body %}
+    {% endblock body %}
+</div>
+</body>
+</html>

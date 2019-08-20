@@ -1,0 +1,29 @@
+{% extends '@FOSUser/layout.html.twig' %}
+
+{% block body %}
+
+    <div>
+        Klasa: {{ class.name }}<br>
+        Wychowawca: <a
+                href="{{ path('homepage', {'id': class.educator.id}) }}">{{ class.educator.firstname }} {{ class.educator.lastname }}</a><br><br>
+
+        {% if class.educator.id  == app.user.id %}
+        <a href="{{ path('add_user_to_class', {'classId': class.id}) }}">Dodaj ucznia.</a>
+        <a href="{{ path('new_lesson', {'classId': class.id}) }}">Dodaj lekcje.</a>
+        {% endif %}<br><br>
+
+        Lekcje:<br>
+
+
+        {% for lesson in lessons %}
+            {{ lesson.subject }}<br>
+        {% endfor %}<br><br>
+
+        Uczniowie:<br>
+
+        {% for pupil in pupils %}
+        {{ pupil.firstname }} {{ pupil.lastname }}<br>
+        {% endfor %}<br><br>
+
+    </div>
+{% endblock %}

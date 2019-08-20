@@ -1,0 +1,12 @@
+{% extends '@FOSUser/layout.html.twig' %}
+
+{% block body %}
+
+    <div>
+        {% for educator in educators %}
+
+            <a href="{{ path('educator_info', {'id': educator.id}) }}">{{ educator.firstname }} {{ educator.lastname }}</a><br><br>
+
+        {% endfor %}
+    </div>
+{% endblock %}
