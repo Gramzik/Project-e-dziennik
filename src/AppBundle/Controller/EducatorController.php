@@ -2,9 +2,7 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Educator;
 use AppBundle\Entity\User;
-use AppBundle\Form\NewEducatorType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
 use Symfony\Component\HttpFoundation\Request;
@@ -13,32 +11,33 @@ use Symfony\Component\HttpFoundation\Response;
 class EducatorController extends Controller
 {
     /**
-     * @Route("/admin/newEducator", name="new_educator")
+     * @Route("/admin/promoteEducator/", name="show_educators_to_promote")
      */
-    public function promoteEducatorAction(Request $request)
+    public function showEducatorsToPromote()
     {
-        $educator = new Educator();
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository(User::class);
 
-        $form = $this->createForm(NewEducatorType::class, $educator);
-        $form->handleRequest($request);
+        $qb = $repo->createQueryBuilder('u');
+        $qb->select('u')
+            ->where('u.roles NOT LIKE :role')
+            ->setParameter('role', '%ROLE_EDUCATOR%');
 
-        //check if form was submitted
-        if ($form->isSubmitted() && $form->isValid()) {
-            $educator = $form->getData();
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($educator);
+        $users = $qb->getQuery()->getResult();
 
-            $educatorId = $educator->getUser();
+        return $this->render(':EducatorViews:showEducatorsToPromote.html.twig', ['users'=>$users]);
+    }
 
-            $repo = $em->getRepository(User::class);
-            $user = $repo->find($educatorId);
-            $user->setRoles(['ROLE_EDUCATOR']);
-            $em->flush();
+    /**
+     * @Route("/admin/newEducator/{id}", name="new_educator")
+     */
+    public function promoteEducatorAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository(User::class);
 
-            return $this->redirectToRoute('show_educators');
-        }
-        //if not show form with twig
-        return $this->render(':EducatorViews:newEducatorForm.html.twig', ['form' => $form->createView()]);
+        $educator = $repo->find($id);
+        $educator->setRole('ROLE_EDUCATOR');
     }
 
     /**
