@@ -100,10 +100,17 @@ class ClassController extends Controller
     }
 
     /**
-     * @Route("/teacher/lessons", name="show_teacher_lessons")
+     * @Route("/showUserClass/{id}", name="show_user_class")
      */
-    public function teacherLessonsAction()
+    public function showUserClassAction($id)
     {
-        return $this->render('');
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository(User::class);
+
+        $user = $repo->find($id);
+        $class = $user->getClass();
+        $classId = $class->getId();
+
+        return $this->redirectToRoute('class_info', ['id' => $classId]);
     }
 }

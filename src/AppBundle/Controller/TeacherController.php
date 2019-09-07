@@ -73,4 +73,19 @@ class TeacherController extends Controller
 
         return $this->render(':TeacherViews:showTeacher.html.twig', ['teacher' => $teacher]);
     }
+
+    /**
+     * @Route("/teacherLessons/{id}", name="show_teacher_lessons")
+     */
+    public function teacherLessonsAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository(User::class);
+
+        $teacher = $repo->find($id);
+        $lessons = $teacher->getLesson();
+
+
+        return $this->render(':TeacherViews:showTeacherLessons.html.twig', ['teacher' => $teacher, 'lessons' => $lessons]);
+    }
 }

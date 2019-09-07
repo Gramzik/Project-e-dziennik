@@ -17,10 +17,14 @@
         <a href="{{ path('admin_panel') }}">Panel Administratora</a>
     {% elseif is_granted('ROLE_EDUCATOR') %}
         <a href="{{ path('educator_panel') }}">Panel Wychowawcy</a>
+        <a href="{{ path('') }}">Moja klasa.</a>
+        <a href="">Moje lekcje.</a>
     {% elseif is_granted('ROLE_TEACHER') %}
         <a href="{{ path('teacher_panel') }}">Panel Nauczyciela</a>
+        <a href="">Moje lekcje.</a>
     {% elseif is_granted('ROLE_USER') %}
         <a href="{{ path('user_panel') }}">Panel Ucznia</a>
+        <a href="">Moja klasa.</a>
     {% endif %}
 </div><br>
 

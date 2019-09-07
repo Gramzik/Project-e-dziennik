@@ -10,14 +10,17 @@
         {% if class.educator.id  == app.user.id %}
         <a href="{{ path('add_user_to_class', {'classId': class.id}) }}">Dodaj ucznia.</a>
         <a href="{{ path('new_lesson', {'classId': class.id}) }}">Dodaj lekcje.</a>
+        {% elseif is_granted('ROLE_SUPER_ADMIN') %}
+            <a href="{{ path('add_user_to_class', {'classId': class.id}) }}">Dodaj ucznia.</a>
+            <a href="{{ path('new_lesson', {'classId': class.id}) }}">Dodaj lekcje.</a>
         {% endif %}<br><br>
 
         Lekcje:<br>
 
 
         {% for lesson in lessons %}
-            {{ lesson.subject }}<br>
-        {% endfor %}<br><br>
+            {{ lesson.subject }}. Nauczyciel: {{ lesson.teacher.firstname }} {{ lesson.teacher.lastname }}<br><br>
+        {% endfor %}<br>
 
         Uczniowie:<br>
 

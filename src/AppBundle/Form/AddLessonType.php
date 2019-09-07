@@ -5,6 +5,7 @@ namespace AppBundle\Form;
 
 use AppBundle\Entity\Lesson;
 use AppBundle\Entity\User;
+use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\SubmitType;
@@ -19,8 +20,16 @@ class AddLessonType extends AbstractType
         $builder
             ->setMethod('POST')
             ->add('subject', TextType::class, ['label' => 'Przedmiot.'])
-            ->add('teacher', EntityType::class, ['class' => User::class, 'choice_label'=> 'username',
-                'label' => 'Nauczyciel.'])
+            ->add('teacher', EntityType::class, ['class' => User::class, 'choice_label' => 'username',
+                'label' => 'Nauczyciel.',
+                'query_builder' => function (EntityRepository $entityRepository) {
+                    return $entityRepository->createQueryBuilder('u')
+                        ->where('u.roles LIKE :role1')
+                        ->orWhere('u.roles LIKE :role2')
+                        ->setParameters(['role1' => '%ROLE_EDUCATOR%',
+                            'role2' => '%ROLE_TEACHER%']);
+                },
+            ])
             ->add('save', SubmitType::class, ['label' => 'Dodaj lekcje.']);
     }
 

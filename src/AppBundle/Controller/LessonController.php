@@ -4,6 +4,7 @@ namespace AppBundle\Controller;
 
 use AppBundle\Entity\Classes;
 use AppBundle\Entity\Lesson;
+use AppBundle\Entity\User;
 use AppBundle\Form\AddLessonType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
@@ -40,6 +41,12 @@ class LessonController extends Controller
         return $this->render(':LessonsViews:newLessonForm.html.twig', ['form' => $form->createView()]);
     }
 
+    /**
+     * @Route("/lessonInfo/{id}", name="lesson_inf")
+     */
+    public function lessonInfoAction($id)
+    {
 
+    }
 
 }

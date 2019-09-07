@@ -40,7 +40,7 @@ class Lesson
     /**
      * @var User
      *
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\User", inversedBy="lesson")
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="lesson")
      * @ORM\JoinColumn(name="teacher_id", referencedColumnName="id")
      */
     private $teacher;

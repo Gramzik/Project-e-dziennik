@@ -43,7 +43,7 @@ class User extends BaseUser
     /**
      * @var Lesson
      *
-     * @ORM\OneToOne(targetEntity="AppBundle\Entity\Lesson", mappedBy="teacher")
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Lesson", mappedBy="teacher")
      */
     private $lesson;
 
@@ -57,6 +57,7 @@ class User extends BaseUser
 
     public function __construct()
     {
+        $this->lesson = new ArrayCollection();
         parent::__construct();
     }
 
