@@ -37,7 +37,13 @@ class EducatorController extends Controller
         $repo = $em->getRepository(User::class);
 
         $educator = $repo->find($id);
-        $educator->setRole('ROLE_EDUCATOR');
+        $educator->setRoles(['ROLE_EDUCATOR']);
+        $em->persist($educator);
+        $em->flush();
+
+        $this->addFlash('notice', 'Mianowano nowego wychowawcę.');
+
+        return $this->redirectToRoute('show_educators_to_promote');
     }
 
     /**
@@ -50,8 +56,8 @@ class EducatorController extends Controller
 
         $qb = $repo->createQueryBuilder('u');
         $qb->select('u')
-            ->where('u.roles LIKE :roles')
-            ->setParameter('roles', '%ROLE_EDUCATOR%');
+            ->where('u.roles LIKE :role')
+            ->setParameter('role', '%ROLE_EDUCATOR%');
 
         $educators = $qb->getQuery()->getResult();
 

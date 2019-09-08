@@ -2,42 +2,49 @@
 
 namespace AppBundle\Controller;
 
-use AppBundle\Entity\Teacher;
 use AppBundle\Entity\User;
-use AppBundle\Form\NewTeacherType;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\HttpFoundation\Request;
 
 class TeacherController extends Controller
 {
     /**
-     * @Route("/admin/newTeacher", name="new_teacher")
+     * @Route("/admin/promoteTeacher/", name="show_teachers_to_promote")
      */
-    public function promoteTeacherAction(Request $request)
+    public function showTeachersToPromote()
     {
-        $teacher = new Teacher();
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository(User::class);
 
-        $form = $this->createForm(NewTeacherType::class);
-        $form->handleRequest($request);
+        $qb = $repo->createQueryBuilder('u');
+        $qb->select('u')
+            ->where('u.roles NOT LIKE :role1')
+            ->andWhere('u.roles NOT LIKE :role2')
+            ->setParameters(['role1' => '%ROLE_EDUCATOR%',
+                'role2' => '%ROLE_TEACHER%']);
 
-        //check if form was submitted
-        if ($form->isSubmitted() && $form->isValid()) {
-            $teacher = $form->getData();
-            $em = $this->getDoctrine()->getManager();
-            $em->persist($teacher);
+        $users = $qb->getQuery()->getResult();
 
-            $teacherId = $teacher->getUser();
+        return $this->render(':TeacherViews:showTeachersToPromote.html.twig', ['users' => $users]);
+    }
 
-            $repo = $em->getRepository('AppBundle:User');
-            $user = $repo->find($teacherId);
-            $user->setRoles(['ROLE_TEACHER']);
-            $em->flush();
+    /**
+     * @Route("/admin/newTeacher/{id}", name="new_teacher")
+     */
+    public function promoteTeacherAction($id)
+    {
+        $em = $this->getDoctrine()->getManager();
+        $repo = $em->getRepository(User::class);
 
-            return $this->redirectToRoute('show_teachers');
-        }
-        //if not show form with twig
-        return $this->render('TeacherViews/newTeacherForm.html.twig', ['form' => $form->createView()]);
+        $educator = $repo->find($id);
+        $educator->setRoles(['ROLE_TEACHER']);
+        $em->persist($educator);
+        $em->flush();
+
+        $this->addFlash('notice', 'Mianowano nowego nauczyciela.');
+
+        return $this->redirectToRoute('show_teachers_to_promote');
     }
 
     /**
@@ -51,10 +58,10 @@ class TeacherController extends Controller
         $qb = $repo->createQueryBuilder('u');
         $qb->select('u')
             ->where('u.roles LIKE :role1')
-            ->andWhere('u.roles LIKE :role2')
+            ->orWhere('u.roles LIKE :role2')
             ->setParameters(['role1' => '%ROLE_TEACHER%',
                 'role2' => '%ROLE_EDUCATOR%'
-                ]);
+            ]);
 
         $teachers = $qb->getQuery()->getResult();
 

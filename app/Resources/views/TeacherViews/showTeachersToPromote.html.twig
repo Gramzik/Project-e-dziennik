@@ -1,0 +1,11 @@
+{% extends '@FOSUser/layout.html.twig' %}
+
+{% block body %}
+
+    {% for user in users %}
+        {{ user.firstname }} {{ user.lastname }}
+        <a href="{{ path('new_teacher', {'id': user.id}) }}">Mianuj na nauczyciela.</a><br><br>
+
+    {% endfor %}
+
+{% endblock %}
