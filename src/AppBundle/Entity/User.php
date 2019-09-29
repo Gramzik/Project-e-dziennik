@@ -55,6 +55,13 @@ class User extends BaseUser
      */
     private $class;
 
+    /**
+     * @var Grade
+     *
+     * @ORM\OneToMany(targetEntity="AppBundle\Entity\Grade", mappedBy="pupil")
+     */
+    private $grade;
+
     public function __construct()
     {
         $this->lesson = new ArrayCollection();

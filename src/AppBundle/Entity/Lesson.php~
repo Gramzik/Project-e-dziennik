@@ -133,45 +133,4 @@ class Lesson
     {
         return $this->teacher;
     }
-    /**
-     * Constructor
-     */
-    public function __construct()
-    {
-        $this->grade = new ArrayCollection();
-    }
-
-    /**
-     * Add grade
-     *
-     * @param \AppBundle\Entity\Grade $grade
-     *
-     * @return Lesson
-     */
-    public function addGrade(\AppBundle\Entity\Grade $grade)
-    {
-        $this->grade[] = $grade;
-
-        return $this;
-    }
-
-    /**
-     * Remove grade
-     *
-     * @param \AppBundle\Entity\Grade $grade
-     */
-    public function removeGrade(\AppBundle\Entity\Grade $grade)
-    {
-        $this->grade->removeElement($grade);
-    }
-
-    /**
-     * Get grade
-     *
-     * @return \Doctrine\Common\Collections\Collection
-     */
-    public function getGrade()
-    {
-        return $this->grade;
-    }
 }

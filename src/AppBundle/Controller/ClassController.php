@@ -70,6 +70,8 @@ class ClassController extends Controller
     {
         $user = $this->container->get('security.token_storage')->getToken()->getUser();
         $userId = $user->getId();
+        $userRole = $user->getRoles();
+        $role = 'ROLE_SUPER_ADMIN';
 
         $em = $this->getDoctrine()->getManager();
         $repo = $em->getRepository(Classes::class);
@@ -77,7 +79,7 @@ class ClassController extends Controller
         $class = $repo->find($classId);
         $educatorId = $class->getEducator()->getId();
 
-        if ($educatorId == $userId) {
+        if ($educatorId == $userId or isset($role,$userRole)) {
 
             $form = $this->createForm(AddUserToClassType::class, $class);
             $form->handleRequest($request);
@@ -95,6 +97,7 @@ class ClassController extends Controller
 
             return $this->render(':ClassViews:addPupilToClass.html.twig', ['form' => $form->createView()]);
         } else {
+            $this->addFlash('notice','Nie jesteś wychowawcą tej klasy.');
             return $this->redirectToRoute('class_info', ['id' => $classId]);
         }
     }

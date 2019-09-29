@@ -3,15 +3,15 @@
 namespace AppBundle\Entity;
 
 use Doctrine\ORM\Mapping as ORM;
-use http\Exception\InvalidArgumentException;
+use InvalidArgumentException;
 
 /**
- * Grades
+ * Grade
  *
- * @ORM\Table(name="grades")
+ * @ORM\Table(name="grade")
  * @ORM\Entity(repositoryClass="AppBundle\Repository\GradesRepository")
  */
-class Grades
+class Grade
 {
     private const ONE = 1;
     private const TWO = 2;
@@ -33,6 +33,21 @@ class Grades
      */
     private $grade;
 
+    /**
+     * @var Lesson
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\Lesson", inversedBy="grade")
+     * @ORM\JoinColumn(name="lesson_id", referencedColumnName="id")
+     */
+    private $lesson;
+
+    /**
+     * @var User
+     *
+     * @ORM\ManyToOne(targetEntity="AppBundle\Entity\User", inversedBy="grade")
+     * @ORM\JoinColumn(name="pupil_id", referencedColumnName="id")
+     */
+    private $pupil;
 
     /**
      * Get id
@@ -62,5 +77,28 @@ class Grades
         }
         $this->grade = $grade;
     }
-}
 
+    /**
+     * Set lesson
+     *
+     * @param \AppBundle\Entity\Lesson $lesson
+     *
+     * @return Grade
+     */
+    public function setLesson(\AppBundle\Entity\Lesson $lesson = null)
+    {
+        $this->lesson = $lesson;
+
+        return $this;
+    }
+
+    /**
+     * Get lesson
+     *
+     * @return \AppBundle\Entity\Lesson
+     */
+    public function getLesson()
+    {
+        return $this->lesson;
+    }
+}
