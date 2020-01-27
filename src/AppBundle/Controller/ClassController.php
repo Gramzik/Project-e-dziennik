@@ -32,7 +32,7 @@ class ClassController extends Controller
             return $this->redirectToRoute('homepage');
         }
         //if not show form with twig
-        return $this->render(':ClassViews:newClassForm.html.twig', ['form' => $form->createView()]);
+        return $this->render('UserViews/FormView.html.twig', ['form' => $form->createView()]);
     }
 
     /**
@@ -95,7 +95,7 @@ class ClassController extends Controller
                 return $this->redirectToRoute('class_info', ['id' => $classId]);
             }
 
-            return $this->render(':ClassViews:addPupilToClass.html.twig', ['form' => $form->createView()]);
+            return $this->render('UserViews/FormView.html.twig', ['form' => $form->createView()]);
         } else {
             $this->addFlash('notice','Nie jesteś wychowawcą tej klasy.');
             return $this->redirectToRoute('class_info', ['id' => $classId]);
@@ -116,4 +116,5 @@ class ClassController extends Controller
 
         return $this->redirectToRoute('class_info', ['id' => $classId]);
     }
+
 }

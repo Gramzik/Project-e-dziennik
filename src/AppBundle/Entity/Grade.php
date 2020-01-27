@@ -13,12 +13,6 @@ use InvalidArgumentException;
  */
 class Grade
 {
-    private const ONE = 1;
-    private const TWO = 2;
-    private const THREE = 3;
-    private const FOUR = 4;
-    private const FIVE = 5;
-    private const SIX = 6;
     /**
      * @var int
      *
@@ -29,7 +23,7 @@ class Grade
     private $id;
 
     /**
-     * @ORM\Column(name="grade", type="smallint", columnDefinition="enum(1,2,3,4,5,6)")
+     * @ORM\Column(name="grade", type="smallint")
      */
     private $grade;
 
@@ -72,9 +66,6 @@ class Grade
      */
     public function setGrade($grade): void
     {
-        if (!in_array($grade, [self::ONE, self::TWO, self::THREE, self::FOUR, self::FIVE, self::SIX])) {
-            throw new InvalidArgumentException("Nieprawidłowa ocena.");
-        }
         $this->grade = $grade;
     }
 
@@ -100,5 +91,29 @@ class Grade
     public function getLesson()
     {
         return $this->lesson;
+    }
+
+    /**
+     * Set pupil
+     *
+     * @param \AppBundle\Entity\User $pupil
+     *
+     * @return Grade
+     */
+    public function setPupil(\AppBundle\Entity\User $pupil = null)
+    {
+        $this->pupil = $pupil;
+
+        return $this;
+    }
+
+    /**
+     * Get pupil
+     *
+     * @return \AppBundle\Entity\User
+     */
+    public function getPupil()
+    {
+        return $this->pupil;
     }
 }

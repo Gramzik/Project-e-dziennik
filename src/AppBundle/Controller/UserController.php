@@ -3,7 +3,7 @@
 namespace AppBundle\Controller;
 
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\Route;
+use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends Controller
 {
@@ -32,11 +32,19 @@ class UserController extends Controller
     }
 
     /**
-     * @Route("admin", name="admin_panel")
+     * @Route("/admin", name="admin_panel")
      */
     public function adminPanelAction()
     {
         return $this->render(':UserViews:adminPanel.html.twig');
+    }
+
+    /**
+     * @Route("/userInfo/{id}", name="show_user_info")
+     */
+    public function showUserInfoAction($id)
+    {
+
     }
 
 }

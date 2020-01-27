@@ -5,7 +5,6 @@ namespace AppBundle\Controller;
 use AppBundle\Entity\User;
 use Symfony\Bundle\FrameworkBundle\Controller\Controller;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Component\HttpFoundation\Request;
 
 class TeacherController extends Controller
 {
@@ -30,6 +29,7 @@ class TeacherController extends Controller
     }
 
     /**
+     *
      * @Route("/admin/newTeacher/{id}", name="new_teacher")
      */
     public function promoteTeacherAction($id)
@@ -68,31 +68,4 @@ class TeacherController extends Controller
         return $this->render(':TeacherViews:showAllTeachers.html.twig', ['teachers' => $teachers]);
     }
 
-    /**
-     * @Route("/teacherInfo/{id}", name="teacher_info")
-     */
-    public function showTeacherAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository(User::class);
-
-        $teacher = $repo->find($id);
-
-        return $this->render(':TeacherViews:showTeacher.html.twig', ['teacher' => $teacher]);
-    }
-
-    /**
-     * @Route("/teacherLessons/{id}", name="show_teacher_lessons")
-     */
-    public function teacherLessonsAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository(User::class);
-
-        $teacher = $repo->find($id);
-        $lessons = $teacher->getLesson();
-
-
-        return $this->render(':TeacherViews:showTeacherLessons.html.twig', ['teacher' => $teacher, 'lessons' => $lessons]);
-    }
 }

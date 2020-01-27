@@ -2,24 +2,23 @@
 
 {% block body %}
 
-    <div>
+    <a>
         Klasa: {{ class.name }}<br>
         Wychowawca: <a
-                href="{{ path('homepage', {'id': class.educator.id}) }}">{{ class.educator.firstname }} {{ class.educator.lastname }}</a><br><br>
+                href="{{ path('show_user_info', {'id': class.educator.id}) }}">{{ class.educator.firstname }} {{ class.educator.lastname }}</a><br><br>
 
-        {% if class.educator.id  == app.user.id %}
+        {% if class.educator.id  == app.user.id or is_granted('ROLE_SUPER_ADMIN') %}
         <a href="{{ path('add_user_to_class', {'classId': class.id}) }}">Dodaj ucznia.</a>
         <a href="{{ path('new_lesson', {'classId': class.id}) }}">Dodaj lekcje.</a>
-        {% elseif is_granted('ROLE_SUPER_ADMIN') %}
-            <a href="{{ path('add_user_to_class', {'classId': class.id}) }}">Dodaj ucznia.</a>
-            <a href="{{ path('new_lesson', {'classId': class.id}) }}">Dodaj lekcje.</a>
         {% endif %}<br><br>
 
         Lekcje:<br>
 
 
         {% for lesson in lessons %}
-            {{ lesson.subject }}. Nauczyciel: {{ lesson.teacher.firstname }} {{ lesson.teacher.lastname }}<br><br>
+            <a href="{{ path('lesson_inf',{'id': lesson.id}) }}">{{ lesson.subject }}.</a>
+            Nauczyciel: {{ lesson.teacher.firstname }} {{ lesson.teacher.lastname }}
+            <br><br>
         {% endfor %}<br>
 
         Uczniowie:<br>

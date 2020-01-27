@@ -64,20 +64,4 @@ class EducatorController extends Controller
         return $this->render(':EducatorViews:showAllEducators.html.twig', ['educators' => $educators]);
     }
 
-    /**
-     * @Route("/educatorInfo/{id}", name="educator_info")
-     */
-    public function showEducatorAction($id)
-    {
-        $em = $this->getDoctrine()->getManager();
-        $repo = $em->getRepository(User::class);
-
-        $educator = $repo->find($id);
-
-
-        return $this->render(':EducatorViews:showEducator.html.twig', ['educator' => $educator]);
-        //TODO
-    }
-
-
 }

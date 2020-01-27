@@ -1,0 +1,30 @@
+{% extends '@FOSUser/layout.html.twig' %}
+
+{% block body %}
+
+    {{ class.name }}.<br><br>
+
+    Lekcja: <br>
+    {{ lesson.subject }} <br><br>
+    Nauczyciel: <br>
+    {{ teacher.firstname }} {{ teacher.lastname }}<br><br>
+
+
+    Uczniowie: <br>
+
+    {% for pupil in pupils %}
+        {{ pupil.firstname }} {{ pupil.lastname }}
+        Oceny:
+        {% for grade in pupil.grade %}
+            {{ grade.grade }}
+        {% endfor %}
+        <br>
+        {% if lesson.teacher.id == app.user.id or is_granted('ROLE_SUPER_ADMIN') %}
+
+            <a href="{{ path('new_grade', {'lessonId': lesson.id, 'userId': pupil.id}) }}">Dodaj nową ocenę.</a>
+
+        {% endif %}
+        <br><br>
+    {% endfor %}
+
+{% endblock %}
